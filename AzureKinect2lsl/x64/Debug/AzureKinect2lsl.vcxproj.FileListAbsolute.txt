@@ -1,0 +1,3 @@
+C:\Users\P154492\Documents\GitHub\AzureKinect2lsl\x64\Debug\dnn_model_2_0_lite_op11.onnx
+C:\Users\P154492\Documents\GitHub\AzureKinect2lsl\x64\Debug\dnn_model_2_0_op11.onnx
+C:\Users\P154492\Documents\GitHub\AzureKinect2lsl\AzureKinect2lsl\x64\Debug\AzureKinect2lsl.vcxproj.CopyComplete

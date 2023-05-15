@@ -17,12 +17,12 @@
 mono_crash.*
 
 # Build results
-[Dd]ebug/
+#[Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
+#[Rr]elease/
 [Rr]eleases/
 #x64/
-#x86/
+x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
@@ -396,3 +396,19 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+x64/Debug/dnn_model_2_0_lite_op11.onnx
+x64/Debug/dnn_model_2_0_op11.onnx
+x64/Release/cudnn_cnn_infer64_8.dll
+x64/Release/cudnn_ops_infer64_8.dll
+*.onnx
+x64/Debug/onnxruntime_providers_tensorrt.dll
+x64/Debug/onnxruntime_providers_shared.dll
+x64/Debug/onnxruntime_providers_cuda.dll
+x64/Debug/onnxruntime.dll
+x64/Release/cublas64_11.dll
+x64/Release/cublasLt64_11.dll
+x64/Release/cudnn64_8.dll
+x64/Release/cudart64_110.dll
+x64/Release/onnxruntime_providers_cuda.dll
+x64/Release/cufft64_10.dll
+x64/Release/nvinfer.dll

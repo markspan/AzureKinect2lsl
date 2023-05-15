@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string>
 #include <stdlib.h>
 #include <lsl_cpp.h>
 #include <k4a/k4a.h>
@@ -33,17 +34,23 @@ int main()
     k4abt_tracker_configuration_t tracker_config = K4ABT_TRACKER_CONFIG_DEFAULT;
     tracker_config.processing_mode = K4ABT_TRACKER_PROCESSING_MODE_GPU_CUDA;
 
+
+    lsl_streaminfo info = NULL;
+
     if (k4abt_tracker_create(&sensor_calibration, tracker_config, &tracker) != K4A_RESULT_SUCCEEDED) {
         printf("%s \n - (File: %s, Function: %s, Line: %d)\n", "Body tracker initialization failed!", "AzureKinect2lsl.cpp", __FUNCTION__, 36);
         k4abt_tracker_t tracker = NULL;
         k4abt_tracker_configuration_t tracker_config = K4ABT_TRACKER_CONFIG_DEFAULT;
         k4abt_tracker_create(&sensor_calibration, tracker_config, &tracker);
         printf("Running tracker is standard (slow) mode\n");
+        info = lsl_create_streaminfo("Azure-Kinect", "MoCap", 32 * 7, 4, cft_double64, "325wqer4354");
     }
-    else printf("Running tracker is CUDA mode\n");
+    else
+    {
+        printf("Running tracker is CUDA mode\n");
+        info = lsl_create_streaminfo("Azure-Kinect", "MoCap", 32 * 7, 10, cft_double64, "325wqer4354");
+    }
 
-
-    lsl_streaminfo info = lsl_create_streaminfo("Azure-Kinect", "MoCap", 32*7, 10, cft_double64, "325wqer4354");
 
     /* add some meta-data fields to it */
     /* (for more standard fields, see https://github.com/sccn/xdf/wiki/Meta-Data) */
@@ -51,21 +58,18 @@ int main()
     lsl_append_child_value(desc, "manufacturer", "University of Groningen");
     lsl_append_child_value(desc, "model", "Azure Kinect");
     lsl_xml_ptr chns = lsl_append_child(desc, "channels");
+    lsl_append_child_value(desc, "unit", "mm");
 
     for (std::unordered_map<k4abt_joint_id_t, std::string>::const_iterator it = g_jointNames.begin(); it != g_jointNames.end(); it++)
     {
-        lsl_xml_ptr chn = lsl_append_child(chns, it->second.c_str());
-        lsl_append_child_value(chn, "unit", "mm");
-        lsl_xml_ptr pos = lsl_append_child(chn, "position");
-        lsl_append_child(pos, "x");
-        lsl_append_child(pos, "y");
-        lsl_append_child(pos, "z");
-        lsl_xml_ptr ori = lsl_append_child(chn, "orientation");
-        lsl_append_child(ori, "w");
-        lsl_append_child(ori, "x");
-        lsl_append_child(ori, "y");
-        lsl_append_child(ori, "z");
-	}
+        lsl_append_child(chns, (std::string(it->second.c_str()) + "_posx").c_str());
+        lsl_append_child(chns, (std::string(it->second.c_str()) + "_posy").c_str());
+        lsl_append_child(chns, (std::string(it->second.c_str()) + "_posz").c_str());
+        lsl_append_child(chns, (std::string(it->second.c_str()) + "_oriw").c_str());
+        lsl_append_child(chns, (std::string(it->second.c_str()) + "_orix").c_str());
+        lsl_append_child(chns, (std::string(it->second.c_str()) + "_oriy").c_str());
+        lsl_append_child(chns, (std::string(it->second.c_str()) + "_oriz").c_str());
+    }
     lsl_outlet outlet = lsl_create_outlet(info, 0, 60);
     do printf("Waiting for recorder\n");
     while (!lsl_wait_for_consumers(outlet, 1200));
